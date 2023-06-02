@@ -1,1 +1,1 @@
-# project
+This Project gives an overview analysis of the ipl data from 2008-2017 and also a in-game predictor to predict the winner of the match using Deep learning and matplotlib library to plot all the data analysis 
