@@ -50,3 +50,52 @@ match_df['WinningTeam'] = match_df['WinningTeam'].str.replace('Deccan Chargers',
 match_df = match_df[match_df['Team1'].isin(teams)]
 match_df = match_df[match_df['Team2'].isin(teams)]
 match_df = match_df[match_df['WinningTeam'].isin(teams)]
+match_df['method'].unique()
+match_df['method'].value_counts()
+match_df = match_df[match_df['method'].isna()]
+#match_df.shape
+#match_df.columns
+match_df = match_df[['ID','City','Team1','Team2','WinningTeam','target']].dropna()
+#match_df.head()
+match_df.isna().sum()
+match_df = match_df[['ID','City','Team1','Team2','WinningTeam','target']].dropna()
+#match_df.head()
+match_df.isna().sum()
+balls['BattingTeam'] = balls['BattingTeam'].str.replace('Kings XI Punjab', 'Punjab Kings')
+balls['BattingTeam'] = balls['BattingTeam'].str.replace('Delhi Daredevils', 'Delhi Capitals')
+balls['BattingTeam'] = balls['BattingTeam'].str.replace('Deccan Chargers', 'Sunrisers Hyderabad')
+
+balls = balls[balls['BattingTeam'].isin(teams)]
+balls_df = match_df.merge(balls, on='ID')
+#balls_df.head()
+balls_df['BattingTeam'].value_counts()
+#fig = px.bar(balls_df['BattingTeam'].value_counts())
+#fig.show()
+#balls_df.columns
+balls_df = balls_df[balls_df['innings']==2]
+# (balls_df.shape)
+# balls_df.head()
+balls_df['current_score'] = balls_df.groupby('ID')['total_run'].cumsum()
+#print(balls_df)
+balls_df['runs_left'] = np.where(balls_df['target']-balls_df['current_score']>=0, balls_df['target']-balls_df['current_score'], 0)
+print(balls_df)
+balls_df['balls_left'] = np.where(120 - balls_df['overs']*6 - balls_df['ballnumber']>=0,120 - balls_df['overs']*6 - balls_df['ballnumber'], 0)
+balls_df['wickets_left'] = 10 - balls_df.groupby('ID')['isWicketDelivery'].cumsum()
+balls_df['current_run_rate'] = (balls_df['current_score']*6)/(120-balls_df['balls_left'])
+balls_df['required_run_rate'] = np.where(balls_df['balls_left']>0, balls_df['runs_left']*6/balls_df['balls_left'], 0)
+def result(row):
+    return 1 if row['BattingTeam'] == row['WinningTeam'] else 0
+balls_df['result'] = balls_df.apply(result, axis=1)
+balls_df.head()
+index1 = balls_df[balls_df['Team2']==balls_df['BattingTeam']]['Team1'].index
+index2 = balls_df[balls_df['Team1']==balls_df['BattingTeam']]['Team2'].index
+balls_df.loc[index1, 'BowlingTeam'] = balls_df.loc[index1, 'Team1']
+balls_df.loc[index2, 'BowlingTeam'] = balls_df.loc[index2, 'Team2']
+# print(balls_df.head())
+final_df = balls_df[['BattingTeam', 'BowlingTeam','City','runs_left','balls_left','wickets_left','current_run_rate','required_run_rate','target','result']]
+#print(final_df.head())
+# print(final_df.describe())
+final_df.isna().sum()
+#print(final_df.shape)
+print(final_df.sample(final_df.shape[0]))
+print(final_df.sample())
