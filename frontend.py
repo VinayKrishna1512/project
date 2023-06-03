@@ -12,11 +12,11 @@ teams = [
         ]
 
 cities = [
-         "Chennai", "Mumbai", "Ahmedabad", "Lucknow", "Jaipur", "Bengaluru",
-          "Kolkata", "Dharamsala", "Guwahati", "Delhi", "Hyderabad"
+         "Chennai", "Mumbai", "Ahmedabad", "Jaipur", "Bengaluru",
+         "Kolkata", "Dharamsala", "Delhi", "Hyderabad"
          ]
 
-column1, column2 = st.beta_columns(2)
+column1, column2 = st.columns(2)
 
 with column1:
     BattingTeam = st.selectbox("Select the batting team", sorted(teams))
@@ -27,7 +27,7 @@ with column2:
 City = st.selectbox("Select Host city", sorted(cities))
 target = st.number_input("Target")
 
-column3, column4, column5 = st.beta_columns(3)
+column3, column4, column5 = st.columns(3)
 
 with column3:
     score = st.number_input("Score")
