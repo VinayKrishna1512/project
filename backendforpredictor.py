@@ -99,3 +99,29 @@ final_df.isna().sum()
 #print(final_df.shape)
 print(final_df.sample(final_df.shape[0]))
 print(final_df.sample())
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split
+
+
+X = final_df.drop('result', axis=1)
+y = final_df['result']
+X.shape, y.shape
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.01, random_state=42)
+trf = ColumnTransformer([('trf', OneHotEncoder(sparse=False,drop='first'),['BattingTeam','BowlingTeam','City'])],remainder = 'passthrough')
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import Pipeline
+pipe = Pipeline(steps=[
+    ('step1',trf),
+    ('step2',RandomForestClassifier())
+])
+pipe.fit(X_train, y_train)
+y_pred = pipe.predict(X_test)
+from sklearn.metrics import accuracy_score
+print(accuracy_score(y_pred, y_test))
+pipe.predict_proba(X_test)
+teams
+final_df['City'].unique()
+import pickle
+pickle.dump(pipe, open('pipe.pkl','wb'))
