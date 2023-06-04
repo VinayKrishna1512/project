@@ -100,4 +100,32 @@ def wickets_all_teams():
     plt.xlabel("Seasons Of IPL", fontsize = 20)
     ax.legend(loc='center left', bbox_to_anchor=(1, 1))
     plt.show()
+# Create the tkinter GUI
+
+root = tk.Tk()
+root.title("IPL Analysis")
+
+# Create the buttons for each function
+
+btn_matches_per_season = tk.Button(root, text="Matches Per Season", command=matches_per_season)
+btn_matches_per_season.pack()
+
+btn_wins_to_totalmatches = tk.Button(root, text="Wins to Total Matches", command=wins_to_totalmatches)
+btn_wins_to_totalmatches.pack()
+
+btn_win_tosswin = tk.Button(root, text="Win/Toss Win", command=win_tosswin)
+btn_win_tosswin.pack()
+
+btn_top_15_potm = tk.Button(root, text="Top 15 Players of the Match", command=top_15_potm)
+btn_top_15_potm.pack()
+
+btn_score_all_teams = tk.Button(root, text="Scores of All Teams", command=score_all_teams)
+btn_score_all_teams.pack()
+
+btn_wickets_all_teams = tk.Button(root, text="Wickets of All Teams", command=wickets_all_teams)
+btn_wickets_all_teams.pack()
+
+
+# Run the GUI main loop
+root.mainloop()
     
