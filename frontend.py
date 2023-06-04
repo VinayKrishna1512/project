@@ -1,13 +1,17 @@
 import streamlit as st
 import pickle
 import pandas as pd
-pipe = pickle.load(open('pipe.pkl', 'rb'))
+try:
+    pipe = pickle.load(open('pipe.pkl', 'rb'))
+except FileNotFoundError:
+    st.error("Model file not found. Please make sure 'pipe.pkl' is present.")
+    st.stop()
 st.title("IPL WIN PREDICTOR")
 
 teams = [
         "Chennai Super Kings", "Mumbai Indians", "Gujarat Titans",
         "Lucknow Super Giants", "Rajasthan Royals",
-        "Royal Challengers Bangalore", "Kings XI Punjab",
+        "Royal Challengers Bangalore", "Punjab Kings",
         "Kolkata Knight Riders", "Delhi Capitals", "Sunrisers Hyderabad"
         ]
 
@@ -25,18 +29,18 @@ with column2:
     BowlingTeam = st.selectbox("Select the bowling team", sorted(teams))
 
 City = st.selectbox("Select Host city", sorted(cities))
-target = st.number_input("Target")
+target = st.number_input("Target", value=0, step=1, format="%d")
 
 column3, column4, column5 = st.columns(3)
 
 with column3:
-    score = st.number_input("Score")
+    score = st.number_input("Score", value=0, step=1, format="%d")
 
 with column4:
-    overs = st.number_input("Overs")
+    overs = st.number_input("Overs", value=0, step=1, format="%d")
 
 with column5:
-    wickets = st.number_input("Wickets")
+    wickets = st.number_input("Wickets", value=0, step=1, format="%d")
 
 if st.button('Predict Probability'):
     runs_left = target - score
