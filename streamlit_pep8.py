@@ -1,11 +1,16 @@
+'''
+Stream lit browser for IPL Predictor
+'''
 import streamlit as st
 import pickle
 import pandas as pd
+# Reading the file
 try:
     pipe = pickle.load(open('pipe.pkl', 'rb'))
 except FileNotFoundError:
     st.error("Model file not found. Please make sure 'pipe.pkl' is present.")
     st.stop()
+
 st.title("IPL WIN PREDICTOR")
 
 teams = [
@@ -19,7 +24,7 @@ cities = [
          "Chennai", "Mumbai", "Ahmedabad", "Jaipur", "Bengaluru",
          "Kolkata", "Dharamsala", "Delhi", "Hyderabad"
          ]
-
+# Creating boxes to input data
 column1, column2 = st.columns(2)
 
 with column1:
@@ -42,7 +47,16 @@ with column4:
 with column5:
     wickets = st.number_input("Wickets", value=0, step=1, format="%d")
 
-if st.button('Predict Probability'):
+if score > target:
+    st.error("Score should not be greater than the target.")
+elif BattingTeam == BowlingTeam:
+    st.error("Both cannot be the same team")
+elif overs > 20:
+    st.error("Overs should not exceed 20.")
+elif wickets > 10:
+    st.error("Wickets should not exceed 10.")
+# Finding the probability if the button is clicked
+elif st.button('Predict Probability'):
     runs_left = target - score
     balls_left = 120 - (overs * 6)
     wickets_left = 10 - wickets
@@ -60,7 +74,7 @@ if st.button('Predict Probability'):
         'current_run_rate': [current_run_rate],
         'required_run_rate': [required_run_rate]
     })
-
+    # Stores the trained value pipe into result as a list of list
     result = pipe.predict_proba(input_df)
     loss = result[0][0]
     win = result[0][1]
