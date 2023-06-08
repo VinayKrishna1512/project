@@ -26,7 +26,7 @@ class Ui_Mainwindow(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(0, -60, 801, 581))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("vinay2.jpg"))
+        self.label.setPixmap(QtGui.QPixmap("background.jpg"))
         self.label.setObjectName("label")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.clicked.connect(click_here)
